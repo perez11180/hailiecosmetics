@@ -3,6 +3,8 @@ import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { X, ArrowLeft, CreditCard, Truck, Shield } from 'lucide-react';
 import { CartItem, ShippingInfo, OrderDetails } from '../types';
 import { US_STATES } from '../data';
+import emailjs from '@emailjs/browser';
+
 
 interface CheckoutProps {
   isOpen: boolean;
@@ -10,7 +12,35 @@ interface CheckoutProps {
   cartItems: CartItem[];
   onOrderComplete: (orderDetails: OrderDetails) => void;
 }
+const sendOrderEmail = async (order: OrderDetails) => {
+  const itemList = order.items
+    .map(item => `- ${item.product.name} x${item.quantity} ($${item.product.price.toFixed(2)})`)
+    .join('\n');
 
+  const params = {
+    first_name: order.shippingInfo.firstName,
+    last_name: order.shippingInfo.lastName,
+    user_email: order.shippingInfo.email,
+    address: order.shippingInfo.address,
+    city: order.shippingInfo.city,
+    state: order.shippingInfo.state,
+    zip_code: order.shippingInfo.zipCode,
+    items: itemList,
+    total: order.total.toFixed(2)
+  };
+
+  try {
+    const res = await emailjs.send(
+      'YOUR_SERVICE_ID',
+      'YOUR_TEMPLATE_ID',
+      params,
+      'YOUR_PUBLIC_KEY'
+    );
+    console.log('Email sent:', res.status);
+  } catch (err) {
+    console.error('Email sending failed:', err);
+  }
+};
 const Checkout: React.FC<CheckoutProps> = ({
   isOpen,
   onClose,
@@ -83,7 +113,7 @@ const Checkout: React.FC<CheckoutProps> = ({
       status: 'confirmed'
     };
     
-    onOrderComplete(orderDetails);
+    sendOrderEmail(orderDetails).then(() => onOrderComplete(orderDetails))
   };
 
   if (!isOpen) return null;
@@ -273,8 +303,10 @@ const Checkout: React.FC<CheckoutProps> = ({
                             style={{ layout: "vertical" }}
                             createOrder={(data, actions) => {
                               return actions.order.create({
+                                intent: "CAPTURE",
                                 purchase_units: [{
                                   amount: {
+                                    currency_code: "USD",
                                     value: total.toFixed(2)
                                   }
                                 }]
