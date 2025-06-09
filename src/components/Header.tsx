@@ -74,6 +74,7 @@ const Header: React.FC<HeaderProps> = ({
 
   const handleProductSelect = (product: Product) => {
     if (onProductSelect) {
+      console.log("I am hit")
       // First change to the correct category
       onCategoryChange(product.category);
       // Then select the product (which will scroll to it)
@@ -253,7 +254,7 @@ const Header: React.FC<HeaderProps> = ({
                   {searchResults.map((product) => (
                     <button
                       key={product.id}
-                      onClick={() => handleProductSelect(product)}
+                      onMouseDown={() => handleProductSelect(product)}
                       className="w-full flex items-center space-x-3 p-3 hover:bg-white transition-colors text-left"
                     >
                       <img

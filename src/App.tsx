@@ -86,7 +86,16 @@ function App() {
 
   const handleProductSelect = (product: Product) => {
     // First scroll to the products section
-    scrollToProducts();
+    setTimeout(() => {
+      const element = document.getElementById(`product-${product.id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  
+        // Optional: highlight the product briefly
+        setHighlightedProductId(product.id);
+        setTimeout(() => setHighlightedProductId(null), 2000);
+      }
+    }, 200); 
     
     // Highlight the selected product
     setHighlightedProductId(product.id);

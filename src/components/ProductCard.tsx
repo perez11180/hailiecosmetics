@@ -11,6 +11,7 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isHighlighted }) => {
   return (
     <div 
+      id={`product-${product.id}`}
       className={`group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden ${
         isHighlighted ? 'ring-4 ring-pink-400 ring-opacity-75 animate-pulse' : ''
       }`}
