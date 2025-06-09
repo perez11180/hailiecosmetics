@@ -17,6 +17,7 @@ function App() {
   const [isOrderConfirmationOpen, setIsOrderConfirmationOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
+  const [highlightedProductId, setHighlightedProductId] = useState<number | null>(null);
   
   const productsRef = useRef<HTMLDivElement>(null);
 
@@ -84,9 +85,16 @@ function App() {
   };
 
   const handleProductSelect = (product: Product) => {
-    // Scroll to the product in the grid
+    // First scroll to the products section
     scrollToProducts();
-    // You could also highlight the product or open a product detail modal here
+    
+    // Highlight the selected product
+    setHighlightedProductId(product.id);
+    
+    // Remove highlight after animation
+    setTimeout(() => {
+      setHighlightedProductId(null);
+    }, 2000);
   };
 
   return (
@@ -109,6 +117,7 @@ function App() {
           <ProductGrid
             products={filteredProducts}
             onAddToCart={handleAddToCart}
+            highlightedProductId={highlightedProductId}
           />
         </div>
         <Testimonials />

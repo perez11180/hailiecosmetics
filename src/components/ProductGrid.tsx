@@ -5,9 +5,10 @@ import { Product } from '../types';
 interface ProductGridProps {
   products: Product[];
   onAddToCart: (product: Product) => void;
+  highlightedProductId?: number | null;
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ products, onAddToCart }) => {
+const ProductGrid: React.FC<ProductGridProps> = ({ products, onAddToCart, highlightedProductId }) => {
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -32,6 +33,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, onAddToCart }) => {
                 key={product.id}
                 product={product}
                 onAddToCart={onAddToCart}
+                isHighlighted={highlightedProductId === product.id}
               />
             ))}
           </div>

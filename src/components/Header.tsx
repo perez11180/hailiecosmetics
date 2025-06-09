@@ -23,7 +23,9 @@ const Header: React.FC<HeaderProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Product[]>([]);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const mobileSearchRef = useRef<HTMLDivElement>(null);
 
   // Handle search functionality
   useEffect(() => {
@@ -48,6 +50,9 @@ const Header: React.FC<HeaderProps> = ({
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setIsSearchOpen(false);
       }
+      if (mobileSearchRef.current && !mobileSearchRef.current.contains(event.target as Node)) {
+        setIsMobileSearchOpen(false);
+      }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -69,15 +74,30 @@ const Header: React.FC<HeaderProps> = ({
 
   const handleProductSelect = (product: Product) => {
     if (onProductSelect) {
+      // First change to the correct category
+      onCategoryChange(product.category);
+      // Then select the product (which will scroll to it)
       onProductSelect(product);
     }
     setSearchQuery('');
     setIsSearchOpen(false);
+    setIsMobileSearchOpen(false);
   };
 
   const handleLogoClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     onCategoryChange('all');
+  };
+
+  const handleMobileSearchToggle = () => {
+    setIsMobileSearchOpen(!isMobileSearchOpen);
+    if (!isMobileSearchOpen) {
+      // Focus the input when opening
+      setTimeout(() => {
+        const input = document.getElementById('mobile-search-input');
+        if (input) input.focus();
+      }, 100);
+    }
   };
 
   return (
@@ -144,8 +164,8 @@ const Header: React.FC<HeaderProps> = ({
 
             {/* Actions */}
             <div className="flex items-center space-x-4">
-              {/* Search */}
-              <div className="relative" ref={searchRef}>
+              {/* Desktop Search */}
+              <div className="relative hidden sm:block" ref={searchRef}>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <input
@@ -153,11 +173,11 @@ const Header: React.FC<HeaderProps> = ({
                     placeholder="Buscar productos..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="hidden sm:block w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm"
+                    className="w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-pink-500 focus:border-transparent text-sm"
                   />
                 </div>
                 
-                {/* Search Results Dropdown */}
+                {/* Desktop Search Results Dropdown */}
                 {isSearchOpen && (
                   <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg max-h-96 overflow-y-auto z-50">
                     {searchResults.map((product) => (
@@ -182,7 +202,10 @@ const Header: React.FC<HeaderProps> = ({
               </div>
 
               {/* Mobile Search Icon */}
-              <button className="sm:hidden p-2 text-gray-400 hover:text-pink-500 transition-colors">
+              <button 
+                onClick={handleMobileSearchToggle}
+                className="sm:hidden p-2 text-gray-400 hover:text-pink-500 transition-colors"
+              >
                 <Search className="h-5 w-5" />
               </button>
 
@@ -208,6 +231,46 @@ const Header: React.FC<HeaderProps> = ({
               </button>
             </div>
           </div>
+
+          {/* Mobile Search Bar (Expandable) */}
+          {isMobileSearchOpen && (
+            <div className="sm:hidden border-t bg-white p-4" ref={mobileSearchRef}>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <input
+                  id="mobile-search-input"
+                  type="text"
+                  placeholder="Buscar productos..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                />
+              </div>
+              
+              {/* Mobile Search Results */}
+              {isSearchOpen && (
+                <div className="mt-2 bg-gray-50 border border-gray-200 rounded-lg max-h-48 overflow-y-auto">
+                  {searchResults.map((product) => (
+                    <button
+                      key={product.id}
+                      onClick={() => handleProductSelect(product)}
+                      className="w-full flex items-center space-x-3 p-3 hover:bg-white transition-colors text-left"
+                    >
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-8 h-8 object-cover rounded-lg"
+                      />
+                      <div className="flex-1">
+                        <p className="font-medium text-gray-900 text-sm">{product.name}</p>
+                        <p className="text-xs text-gray-500">${product.price.toFixed(2)} USD</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </header>
 
@@ -283,46 +346,6 @@ const Header: React.FC<HeaderProps> = ({
                   </button>
                 </div>
               </nav>
-
-              {/* Mobile Search */}
-              <div className="p-6 border-t">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Buscar productos..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                  />
-                </div>
-                
-                {/* Mobile Search Results */}
-                {isSearchOpen && (
-                  <div className="mt-2 bg-gray-50 border border-gray-200 rounded-lg max-h-48 overflow-y-auto">
-                    {searchResults.map((product) => (
-                      <button
-                        key={product.id}
-                        onClick={() => {
-                          handleProductSelect(product);
-                          setIsMobileMenuOpen(false);
-                        }}
-                        className="w-full flex items-center space-x-3 p-3 hover:bg-white transition-colors text-left"
-                      >
-                        <img
-                          src={product.image}
-                          alt={product.name}
-                          className="w-8 h-8 object-cover rounded-lg"
-                        />
-                        <div className="flex-1">
-                          <p className="font-medium text-gray-900 text-sm">{product.name}</p>
-                          <p className="text-xs text-gray-500">${product.price.toFixed(2)} USD</p>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
             </div>
           </div>
         </div>

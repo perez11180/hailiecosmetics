@@ -5,11 +5,16 @@ import { Product } from '../types';
 interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product) => void;
+  isHighlighted?: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isHighlighted }) => {
   return (
-    <div className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+    <div 
+      className={`group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden ${
+        isHighlighted ? 'ring-4 ring-pink-400 ring-opacity-75 animate-pulse' : ''
+      }`}
+    >
       <div className="relative overflow-hidden">
         <img
           src={product.image}
