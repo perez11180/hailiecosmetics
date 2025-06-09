@@ -83,6 +83,12 @@ function App() {
     scrollToProducts();
   };
 
+  const handleProductSelect = (product: Product) => {
+    // Scroll to the product in the grid
+    scrollToProducts();
+    // You could also highlight the product or open a product detail modal here
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Header
@@ -90,6 +96,8 @@ function App() {
         onCartClick={() => setIsCartOpen(true)}
         activeCategory={activeCategory}
         onCategoryChange={setActiveCategory}
+        products={products}
+        onProductSelect={handleProductSelect}
       />
       
       <main>

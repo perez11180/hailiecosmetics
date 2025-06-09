@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Plus, Minus, ShoppingBag } from 'lucide-react';
 import { CartItem } from '../types';
 
@@ -24,11 +24,19 @@ const Cart: React.FC<CartProps> = ({
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + shipping + tax;
 
+  // Lock body scroll when cart is open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
-      <div className="absolute inset-0 bg-black bg-opacity-50\" onClick={onClose}></div>
+      <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
       <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl transform transition-transform">
         <div className="flex flex-col h-full">
           {/* Header */}
