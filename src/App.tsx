@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ProductGrid from './components/ProductGrid';
@@ -112,7 +112,10 @@ function App() {
         cartItemsCount={cartItemsCount}
         onCartClick={() => setIsCartOpen(true)}
         activeCategory={activeCategory}
-        onCategoryChange={setActiveCategory}
+        onCategoryChange={(category) => {
+          setActiveCategory(category)
+          scrollToProducts()
+        }}
         products={products}
         onProductSelect={handleProductSelect}
       />
