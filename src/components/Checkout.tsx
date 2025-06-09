@@ -127,7 +127,7 @@ const Checkout: React.FC<CheckoutProps> = ({
         <div className="bg-white rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-y-auto">
           <div className="flex flex-col">
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-10">
+            <div className="flex items-center justify-between p-6 border-b sticky top-0 bg-white z-100">
               <div className="flex items-center space-x-4">
                 {step === 'payment' && (
                   <button
