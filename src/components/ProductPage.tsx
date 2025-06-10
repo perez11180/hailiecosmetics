@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ShoppingCart, Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product, ProductVariation } from '../types';
 import { products } from '../data';
 
@@ -28,6 +28,14 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
       }
     }
   }, [id]);
+
+  // Lock body scroll
+  useEffect(() => {
+    document.body.style.overflow = 'auto';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   if (!product) {
     return (
@@ -72,25 +80,19 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="sticky top-0 z-10 bg-white border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <button
-              onClick={() => navigate('/')}
-              className="flex items-center space-x-2 text-gray-600 hover:text-pink-600 transition-colors"
-            >
-              <ArrowLeft className="h-5 w-5" />
-              <span className="font-medium">Volver</span>
-            </button>
-            <h1 className="text-lg font-semibold text-gray-900 truncate">{product.name}</h1>
-            <div className="w-20"></div> {/* Spacer for centering */}
-          </div>
-        </div>
-      </div>
-
+    <div className="bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Back Button */}
+        <div className="mb-8">
+          <button
+            onClick={() => navigate('/')}
+            className="flex items-center space-x-2 text-gray-600 hover:text-pink-600 transition-colors"
+          >
+            <ArrowLeft className="h-5 w-5" />
+            <span className="font-medium">Volver a productos</span>
+          </button>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Image Slideshow */}
           <div className="space-y-4">
@@ -229,11 +231,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
               >
                 <ShoppingCart className="h-5 w-5" />
                 <span>Agregar al carrito</span>
-              </button>
-
-              <button className="w-full flex items-center justify-center space-x-3 py-4 px-6 rounded-xl font-semibold text-lg border-2 border-pink-400 text-pink-600 hover:bg-pink-50 transition-colors">
-                <Heart className="h-5 w-5" />
-                <span>Agregar a favoritos</span>
               </button>
             </div>
 

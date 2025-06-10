@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ShoppingBag, Heart, Search, Menu, X } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Product } from '../types';
 
 interface HeaderProps {
@@ -19,6 +20,8 @@ const Header: React.FC<HeaderProps> = ({
   products = [],
   onProductSelect
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<Product[]>([]);
@@ -68,17 +71,31 @@ const Header: React.FC<HeaderProps> = ({
   }, [isMobileMenuOpen]);
 
   const handleCategoryClick = (category: string) => {
-    onCategoryChange(category);
+    // If not on homepage, navigate to homepage first
+    if (location.pathname !== '/') {
+      navigate('/');
+      // Wait for navigation to complete, then update category
+      setTimeout(() => {
+        onCategoryChange(category);
+      }, 100);
+    } else {
+      onCategoryChange(category);
+    }
     setIsMobileMenuOpen(false);
   };
 
   const handleProductSelect = (product: Product) => {
     if (onProductSelect) {
-      console.log("I am hit")
-      // First change to the correct category
-      onCategoryChange(product.category);
-      // Then select the product (which will scroll to it)
-      onProductSelect(product);
+      // If not on homepage, navigate to homepage first
+      if (location.pathname !== '/') {
+        navigate('/');
+        // Wait for navigation to complete, then select product
+        setTimeout(() => {
+          onProductSelect(product);
+        }, 200);
+      } else {
+        onProductSelect(product);
+      }
     }
     setSearchQuery('');
     setIsSearchOpen(false);
@@ -86,7 +103,7 @@ const Header: React.FC<HeaderProps> = ({
   };
 
   const handleLogoClick = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    navigate('/');
     onCategoryChange('all');
   };
 
@@ -122,7 +139,7 @@ const Header: React.FC<HeaderProps> = ({
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">
               <button
-                onClick={() => onCategoryChange('all')}
+                onClick={() => handleCategoryClick('all')}
                 className={`text-gray-700 hover:text-pink-500 px-3 py-2 text-sm font-medium transition-colors ${
                   activeCategory === 'all' ? 'text-pink-500 border-b-2 border-pink-500' : ''
                 }`}
@@ -130,7 +147,7 @@ const Header: React.FC<HeaderProps> = ({
                 Todo
               </button>
               <button
-                onClick={() => onCategoryChange('maquillaje')}
+                onClick={() => handleCategoryClick('maquillaje')}
                 className={`text-gray-700 hover:text-pink-500 px-3 py-2 text-sm font-medium transition-colors ${
                   activeCategory === 'maquillaje' ? 'text-pink-500 border-b-2 border-pink-500' : ''
                 }`}
@@ -138,7 +155,7 @@ const Header: React.FC<HeaderProps> = ({
                 Maquillaje
               </button>
               <button
-                onClick={() => onCategoryChange('cuidado-piel')}
+                onClick={() => handleCategoryClick('cuidado-piel')}
                 className={`text-gray-700 hover:text-pink-500 px-3 py-2 text-sm font-medium transition-colors ${
                   activeCategory === 'cuidado-piel' ? 'text-pink-500 border-b-2 border-pink-500' : ''
                 }`}
@@ -146,7 +163,7 @@ const Header: React.FC<HeaderProps> = ({
                 Cuidado de la Piel
               </button>
               <button
-                onClick={() => onCategoryChange('labios')}
+                onClick={() => handleCategoryClick('labios')}
                 className={`text-gray-700 hover:text-pink-500 px-3 py-2 text-sm font-medium transition-colors ${
                   activeCategory === 'labios' ? 'text-pink-500 border-b-2 border-pink-500' : ''
                 }`}
@@ -154,7 +171,7 @@ const Header: React.FC<HeaderProps> = ({
                 Labios
               </button>
               <button
-                onClick={() => onCategoryChange('unas')}
+                onClick={() => handleCategoryClick('unas')}
                 className={`text-gray-700 hover:text-pink-500 px-3 py-2 text-sm font-medium transition-colors ${
                   activeCategory === 'unas' ? 'text-pink-500 border-b-2 border-pink-500' : ''
                 }`}

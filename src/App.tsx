@@ -12,21 +12,11 @@ import { products } from './data';
 import { Product, CartItem, OrderDetails } from './types';
 
 function HomePage({ 
-  cartItemsCount, 
-  onCartClick, 
-  activeCategory, 
-  onCategoryChange, 
-  onProductSelect, 
   filteredProducts, 
   onAddToCart, 
   highlightedProductId, 
   scrollToProducts 
 }: {
-  cartItemsCount: number;
-  onCartClick: () => void;
-  activeCategory: string;
-  onCategoryChange: (category: string) => void;
-  onProductSelect: (product: Product) => void;
   filteredProducts: Product[];
   onAddToCart: (product: Product, variationId?: string) => void;
   highlightedProductId: number | null;
@@ -34,45 +24,25 @@ function HomePage({
 }) {
   const productsRef = useRef<HTMLDivElement>(null);
 
+  const handleScrollToProducts = () => {
+    setTimeout(() => {
+      productsRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
   return (
     <>
-      <Header
-        cartItemsCount={cartItemsCount}
-        onCartClick={onCartClick}
-        activeCategory={activeCategory}
-        onCategoryChange={(category) => {
-          onCategoryChange(category);
-          setTimeout(() => {
-            productsRef.current?.scrollIntoView({ behavior: 'smooth' });
-          }, 100);
-        }}
-        products={products}
-        onProductSelect={onProductSelect}
+      <Hero 
+        onShopNowClick={handleScrollToProducts}
+        onViewCatalogClick={handleScrollToProducts}
       />
-      
-      <main>
-        <Hero 
-          onShopNowClick={() => {
-            setTimeout(() => {
-              productsRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-          }}
-          onViewCatalogClick={() => {
-            setTimeout(() => {
-              productsRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-          }}
+      <div ref={productsRef}>
+        <ProductGrid
+          products={filteredProducts}
+          onAddToCart={onAddToCart}
+          highlightedProductId={highlightedProductId}
         />
-        <div ref={productsRef}>
-          <ProductGrid
-            products={filteredProducts}
-            onAddToCart={onAddToCart}
-            highlightedProductId={highlightedProductId}
-          />
-        </div>
-      </main>
-
-      <Footer />
+      </div>
     </>
   );
 }
@@ -169,32 +139,56 @@ function App() {
     }, 200);
   };
 
+  const scrollToProducts = () => {
+    setTimeout(() => {
+      const element = document.querySelector('[data-products-section]');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
   return (
     <Router>
       <div className="min-h-screen bg-white">
-        <Routes>
-          <Route 
-            path="/" 
-            element={
-              <HomePage
-                cartItemsCount={cartItemsCount}
-                onCartClick={() => setIsCartOpen(true)}
-                activeCategory={activeCategory}
-                onCategoryChange={setActiveCategory}
-                onProductSelect={handleProductSelect}
-                filteredProducts={filteredProducts}
-                onAddToCart={handleAddToCart}
-                highlightedProductId={highlightedProductId}
-                scrollToProducts={() => {}}
-              />
-            } 
-          />
-          <Route 
-            path="/product/:id" 
-            element={<ProductPage onAddToCart={handleAddToCart} />} 
-          />
-        </Routes>
+        {/* Header - appears on all pages */}
+        <Header
+          cartItemsCount={cartItemsCount}
+          onCartClick={() => setIsCartOpen(true)}
+          activeCategory={activeCategory}
+          onCategoryChange={(category) => {
+            setActiveCategory(category);
+            scrollToProducts();
+          }}
+          products={products}
+          onProductSelect={handleProductSelect}
+        />
 
+        {/* Main Content */}
+        <main>
+          <Routes>
+            <Route 
+              path="/" 
+              element={
+                <HomePage
+                  filteredProducts={filteredProducts}
+                  onAddToCart={handleAddToCart}
+                  highlightedProductId={highlightedProductId}
+                  scrollToProducts={scrollToProducts}
+                />
+              } 
+            />
+            <Route 
+              path="/product/:id" 
+              element={<ProductPage onAddToCart={handleAddToCart} />} 
+            />
+          </Routes>
+        </main>
+
+        {/* Footer - appears on all pages */}
+        <Footer />
+
+        {/* Global Modals */}
         <Cart
           isOpen={isCartOpen}
           onClose={() => setIsCartOpen(false)}
