@@ -188,7 +188,7 @@ const Header: React.FC<HeaderProps> = ({
                         className="w-full flex items-center space-x-3 p-3 hover:bg-gray-50 transition-colors text-left"
                       >
                         <img
-                          src={product.image}
+                          src={product.image[0]}
                           alt={product.name}
                           className="w-10 h-10 object-cover rounded-lg"
                         />
@@ -258,7 +258,7 @@ const Header: React.FC<HeaderProps> = ({
                       className="w-full flex items-center space-x-3 p-3 hover:bg-white transition-colors text-left"
                     >
                       <img
-                        src={product.image}
+                        src={product.image[0]}
                         alt={product.name}
                         className="w-8 h-8 object-cover rounded-lg"
                       />

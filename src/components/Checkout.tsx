@@ -3,6 +3,7 @@ import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { X, ArrowLeft, CreditCard, Truck, Shield } from 'lucide-react';
 import { CartItem, ShippingInfo, OrderDetails } from '../types';
 import emailjs from '@emailjs/browser';
+import { US_STATES } from '../data';
 
 
 interface CheckoutProps {
@@ -344,7 +345,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                     {cartItems.map((item) => (
                       <div key={item.product.id} className="flex items-center space-x-3">
                         <img
-                          src={item.product.image}
+                          src={item.product.image[0]}
                           alt={item.product.name}
                           className="w-12 h-12 object-cover rounded-lg"
                         />
