@@ -6,8 +6,8 @@ interface CartProps {
   isOpen: boolean;
   onClose: () => void;
   cartItems: CartItem[];
-  onUpdateQuantity: (productId: number, quantity: number) => void;
-  onRemoveItem: (productId: number) => void;
+  onUpdateQuantity: (productId: number, quantity: number, variationId?: string) => void;
+  onRemoveItem: (productId: number, variationId?: string) => void;
   onCheckout: () => void;
 }
 
@@ -31,6 +31,18 @@ const Cart: React.FC<CartProps> = ({
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
+  const getVariationName = (item: CartItem) => {
+    if (!item.variationId || !item.product.variations) return '';
+    const variation = item.product.variations.find(v => v.id === item.variationId);
+    return variation ? ` - ${variation.name}` : '';
+  };
+
+  const getItemPrice = (item: CartItem) => {
+    if (!item.variationId || !item.product.variations) return item.product.price;
+    const variation = item.product.variations.find(v => v.id === item.variationId);
+    return variation?.price !== undefined ? variation.price : item.product.price;
+  };
 
   if (!isOpen) return null;
 
@@ -63,34 +75,36 @@ const Cart: React.FC<CartProps> = ({
               </div>
             ) : (
               <div className="space-y-4">
-                {cartItems.map((item) => (
-                  <div key={item.product.id} className="flex items-center space-x-4 bg-gray-50 p-4 rounded-xl">
+                {cartItems.map((item, index) => (
+                  <div key={`${item.product.id}-${item.variationId || 'default'}-${index}`} className="flex items-center space-x-4 bg-gray-50 p-4 rounded-xl">
                     <img
-                      src={item.product.image}
+                      src={item.product.image[0]}
                       alt={item.product.name}
                       className="w-16 h-16 object-cover rounded-lg"
                     />
                     <div className="flex-1">
-                      <h3 className="font-medium text-gray-900 text-sm">{item.product.name}</h3>
-                      <p className="text-pink-600 font-semibold">${item.product.price.toFixed(2)} USD</p>
+                      <h3 className="font-medium text-gray-900 text-sm">
+                        {item.product.name}{getVariationName(item)}
+                      </h3>
+                      <p className="text-pink-600 font-semibold">${getItemPrice(item).toFixed(2)} USD</p>
                     </div>
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => onUpdateQuantity(item.product.id, item.quantity - 1)}
+                        onClick={() => onUpdateQuantity(item.product.id, item.quantity - 1, item.variationId)}
                         className="p-1 text-gray-400 hover:text-pink-500 transition-colors"
                       >
                         <Minus className="h-4 w-4" />
                       </button>
                       <span className="w-8 text-center font-medium">{item.quantity}</span>
                       <button
-                        onClick={() => onUpdateQuantity(item.product.id, item.quantity + 1)}
+                        onClick={() => onUpdateQuantity(item.product.id, item.quantity + 1, item.variationId)}
                         className="p-1 text-gray-400 hover:text-pink-500 transition-colors"
                       >
                         <Plus className="h-4 w-4" />
                       </button>
                     </div>
                     <button
-                      onClick={() => onRemoveItem(item.product.id)}
+                      onClick={() => onRemoveItem(item.product.id, item.variationId)}
                       className="p-1 text-gray-400 hover:text-red-500 transition-colors"
                     >
                       <X className="h-4 w-4" />

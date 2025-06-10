@@ -1,17 +1,26 @@
+export interface ProductVariation {
+  id: string;
+  name: string; // e.g. "Red", "Large"
+  inStock: boolean;
+  price?: number; // Optional override per variation
+}
+
 export interface Product {
   id: number;
   name: string;
   description: string;
-  price: number;
-  image: string[];
-  category: string | 'maquillaje' | 'cuidado-piel' | 'labios' | 'unas' | 'peluches';
+  price: number; // Base price
+  image: string[]; // Array of all images
+  category: 'maquillaje' | 'cuidado-piel' | 'labios' | 'unas' | 'peluches';
   inStock: boolean;
   featured?: boolean;
+  variations?: ProductVariation[]; // Optional
 }
 
 export interface CartItem {
   product: Product;
   quantity: number;
+  variationId?: string;
 }
 
 export interface Review {

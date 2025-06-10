@@ -1,13 +1,81 @@
 import { useState, useMemo, useRef } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ProductGrid from './components/ProductGrid';
+import ProductPage from './components/ProductPage';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import OrderConfirmation from './components/OrderConfirmation';
 import Footer from './components/Footer';
 import { products } from './data';
 import { Product, CartItem, OrderDetails } from './types';
+
+function HomePage({ 
+  cartItemsCount, 
+  onCartClick, 
+  activeCategory, 
+  onCategoryChange, 
+  onProductSelect, 
+  filteredProducts, 
+  onAddToCart, 
+  highlightedProductId, 
+  scrollToProducts 
+}: {
+  cartItemsCount: number;
+  onCartClick: () => void;
+  activeCategory: string;
+  onCategoryChange: (category: string) => void;
+  onProductSelect: (product: Product) => void;
+  filteredProducts: Product[];
+  onAddToCart: (product: Product, variationId?: string) => void;
+  highlightedProductId: number | null;
+  scrollToProducts: () => void;
+}) {
+  const productsRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <>
+      <Header
+        cartItemsCount={cartItemsCount}
+        onCartClick={onCartClick}
+        activeCategory={activeCategory}
+        onCategoryChange={(category) => {
+          onCategoryChange(category);
+          setTimeout(() => {
+            productsRef.current?.scrollIntoView({ behavior: 'smooth' });
+          }, 100);
+        }}
+        products={products}
+        onProductSelect={onProductSelect}
+      />
+      
+      <main>
+        <Hero 
+          onShopNowClick={() => {
+            setTimeout(() => {
+              productsRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          }}
+          onViewCatalogClick={() => {
+            setTimeout(() => {
+              productsRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          }}
+        />
+        <div ref={productsRef}>
+          <ProductGrid
+            products={filteredProducts}
+            onAddToCart={onAddToCart}
+            highlightedProductId={highlightedProductId}
+          />
+        </div>
+      </main>
+
+      <Footer />
+    </>
+  );
+}
 
 function App() {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -17,8 +85,6 @@ function App() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [highlightedProductId, setHighlightedProductId] = useState<number | null>(null);
-  
-  const productsRef = useRef<HTMLDivElement>(null);
 
   const filteredProducts = useMemo(() => {
     if (activeCategory === 'all') {
@@ -29,40 +95,44 @@ function App() {
 
   const cartItemsCount = cartItems.reduce((total, item) => total + item.quantity, 0);
 
-  const scrollToProducts = () => {
-    productsRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (product: Product, variationId?: string) => {
     setCartItems(prevItems => {
-      const existingItem = prevItems.find(item => item.product.id === product.id);
-      if (existingItem) {
-        return prevItems.map(item =>
-          item.product.id === product.id
+      const existingItemIndex = prevItems.findIndex(
+        item => item.product.id === product.id && item.variationId === variationId
+      );
+      
+      if (existingItemIndex >= 0) {
+        return prevItems.map((item, index) =>
+          index === existingItemIndex
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      return [...prevItems, { product, quantity: 1 }];
+      
+      return [...prevItems, { product, quantity: 1, variationId }];
     });
   };
 
-  const handleUpdateQuantity = (productId: number, quantity: number) => {
+  const handleUpdateQuantity = (productId: number, quantity: number, variationId?: string) => {
     if (quantity <= 0) {
-      handleRemoveItem(productId);
+      handleRemoveItem(productId, variationId);
       return;
     }
     setCartItems(prevItems =>
       prevItems.map(item =>
-        item.product.id === productId
+        item.product.id === productId && item.variationId === variationId
           ? { ...item, quantity }
           : item
       )
     );
   };
 
-  const handleRemoveItem = (productId: number) => {
-    setCartItems(prevItems => prevItems.filter(item => item.product.id !== productId));
+  const handleRemoveItem = (productId: number, variationId?: string) => {
+    setCartItems(prevItems => 
+      prevItems.filter(item => 
+        !(item.product.id === productId && item.variationId === variationId)
+      )
+    );
   };
 
   const handleCheckout = () => {
@@ -80,84 +150,75 @@ function App() {
   const handleContinueShopping = () => {
     setIsOrderConfirmationOpen(false);
     setOrderDetails(null);
-    scrollToProducts();
   };
 
   const handleProductSelect = (product: Product) => {
-    // First scroll to the products section
+    // First change to the correct category
+    setActiveCategory(product.category);
+    
+    // Then scroll to and highlight the product
     setTimeout(() => {
       const element = document.getElementById(`product-${product.id}`);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  
-        // Optional: highlight the product briefly
+        
+        // Highlight the selected product
         setHighlightedProductId(product.id);
         setTimeout(() => setHighlightedProductId(null), 2000);
       }
-    }, 200); 
-    
-    // Highlight the selected product
-    setHighlightedProductId(product.id);
-    
-    // Remove highlight after animation
-    setTimeout(() => {
-      setHighlightedProductId(null);
-    }, 2000);
+    }, 200);
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header
-        cartItemsCount={cartItemsCount}
-        onCartClick={() => setIsCartOpen(true)}
-        activeCategory={activeCategory}
-        onCategoryChange={(category) => {
-          setActiveCategory(category)
-          scrollToProducts()
-        }}
-        products={products}
-        onProductSelect={handleProductSelect}
-      />
-      
-      <main>
-        <Hero 
-          onShopNowClick={scrollToProducts}
-          onViewCatalogClick={scrollToProducts}
-        />
-        <div ref={productsRef}>
-          <ProductGrid
-            products={filteredProducts}
-            onAddToCart={handleAddToCart}
-            highlightedProductId={highlightedProductId}
+    <Router>
+      <div className="min-h-screen bg-white">
+        <Routes>
+          <Route 
+            path="/" 
+            element={
+              <HomePage
+                cartItemsCount={cartItemsCount}
+                onCartClick={() => setIsCartOpen(true)}
+                activeCategory={activeCategory}
+                onCategoryChange={setActiveCategory}
+                onProductSelect={handleProductSelect}
+                filteredProducts={filteredProducts}
+                onAddToCart={handleAddToCart}
+                highlightedProductId={highlightedProductId}
+                scrollToProducts={() => {}}
+              />
+            } 
           />
-        </div>
-      </main>
+          <Route 
+            path="/product/:id" 
+            element={<ProductPage onAddToCart={handleAddToCart} />} 
+          />
+        </Routes>
 
-      <Footer />
+        <Cart
+          isOpen={isCartOpen}
+          onClose={() => setIsCartOpen(false)}
+          cartItems={cartItems}
+          onUpdateQuantity={handleUpdateQuantity}
+          onRemoveItem={handleRemoveItem}
+          onCheckout={handleCheckout}
+        />
 
-      <Cart
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        cartItems={cartItems}
-        onUpdateQuantity={handleUpdateQuantity}
-        onRemoveItem={handleRemoveItem}
-        onCheckout={handleCheckout}
-      />
+        <Checkout
+          isOpen={isCheckoutOpen}
+          onClose={() => setIsCheckoutOpen(false)}
+          cartItems={cartItems}
+          onOrderComplete={handleOrderComplete}
+        />
 
-      <Checkout
-        isOpen={isCheckoutOpen}
-        onClose={() => setIsCheckoutOpen(false)}
-        cartItems={cartItems}
-        onOrderComplete={handleOrderComplete}
-      />
-
-      <OrderConfirmation
-        isOpen={isOrderConfirmationOpen}
-        onClose={() => setIsOrderConfirmationOpen(false)}
-        orderDetails={orderDetails}
-        onContinueShopping={handleContinueShopping}
-      />
-    </div>
+        <OrderConfirmation
+          isOpen={isOrderConfirmationOpen}
+          onClose={() => setIsOrderConfirmationOpen(false)}
+          orderDetails={orderDetails}
+          onContinueShopping={handleContinueShopping}
+        />
+      </div>
+    </Router>
   );
 }
 

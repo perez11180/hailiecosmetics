@@ -4,7 +4,7 @@ import { Product } from '../types';
 
 interface ProductGridProps {
   products: Product[];
-  onAddToCart: (product: Product) => void;
+  onAddToCart: (product: Product, variationId?: string) => void;
   highlightedProductId?: number | null;
 }
 
