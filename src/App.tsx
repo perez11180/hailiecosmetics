@@ -5,7 +5,6 @@ import ProductGrid from './components/ProductGrid';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import OrderConfirmation from './components/OrderConfirmation';
-import Testimonials from './components/Testimonials';
 import Footer from './components/Footer';
 import { products } from './data';
 import { Product, CartItem, OrderDetails } from './types';
@@ -132,7 +131,6 @@ function App() {
             highlightedProductId={highlightedProductId}
           />
         </div>
-        <Testimonials />
       </main>
 
       <Footer />

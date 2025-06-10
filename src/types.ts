@@ -3,8 +3,8 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  image: string;
-  category: 'maquillaje' | 'cuidado-piel' | 'labios' | 'unas';
+  image: string | string[];
+  category: string | 'maquillaje' | 'cuidado-piel' | 'labios' | 'unas';
   inStock: boolean;
   featured?: boolean;
 }
