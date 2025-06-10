@@ -301,7 +301,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                         }}>
                           <PayPalButtons
                             style={{ layout: "vertical" }}
-                            createOrder={(data, actions) => {
+                            createOrder={(_, actions) => {
                               return actions.order.create({
                                 intent: "CAPTURE",
                                 purchase_units: [{
@@ -312,7 +312,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                                 }]
                               });
                             }}
-                            onApprove={(data, actions) => {
+                            onApprove={async (_, actions) => {
                               return actions.order!.capture().then(handlePaymentSuccess);
                             }}
                             onError={(err) => {
@@ -345,7 +345,7 @@ const Checkout: React.FC<CheckoutProps> = ({
                     {cartItems.map((item) => (
                       <div key={item.product.id} className="flex items-center space-x-3">
                         <img
-                          src={item.product.image[0]}
+                          src={item.product.image[Number(item.variationId)]}
                           alt={item.product.name}
                           className="w-12 h-12 object-cover rounded-lg"
                         />

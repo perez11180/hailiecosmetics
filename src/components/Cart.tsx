@@ -78,7 +78,7 @@ const Cart: React.FC<CartProps> = ({
                 {cartItems.map((item, index) => (
                   <div key={`${item.product.id}-${item.variationId || 'default'}-${index}`} className="flex items-center space-x-4 bg-gray-50 p-4 rounded-xl">
                     <img
-                      src={item.product.image[0]}
+                      src={item.product.image[Number(item.variationId)]}
                       alt={item.product.name}
                       className="w-16 h-16 object-cover rounded-lg"
                     />

@@ -16,26 +16,26 @@ export const products: Product[] = [
     featured: true,
     variations: [
       {
-        id: "small-brown",
-        name: "Pequeño - Marrón",
+        id: "0",
+        name: "Blanco",
         inStock: true,
         price: 8.00
       },
       {
-        id: "medium-brown",
-        name: "Mediano - Marrón",
+        id: "1",
+        name: "Azule",
         inStock: true,
         price: 10.00
       },
       {
-        id: "large-brown",
-        name: "Grande - Marrón",
+        id: "2",
+        name: "rosado",
         inStock: false,
         price: 15.00
       },
       {
-        id: "small-white",
-        name: "Pequeño - Blanco",
+        id: "3",
+        name: "Purpulo",
         inStock: true,
         price: 8.00
       }
@@ -54,17 +54,17 @@ export const products: Product[] = [
     inStock: true,
     variations: [
       {
-        id: "red-classic",
+        id: "0",
         name: "Rojo Clásico",
         inStock: true
       },
       {
-        id: "pink-nude",
+        id: "1",
         name: "Rosa Nude",
         inStock: true
       },
       {
-        id: "berry-bold",
+        id: "2",
         name: "Berry Intenso",
         inStock: false
       }
