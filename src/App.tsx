@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Cart from './components/Cart';
 import OrderConfirmation from './components/OrderConfirmation';
@@ -153,6 +153,7 @@ function AppContent() {
               />
             } 
           />
+          <Route path="*" element={<Navigate to="/" replace />}/>
         </Routes>
       </main>
 
