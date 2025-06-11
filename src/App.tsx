@@ -1,11 +1,11 @@
 import { useState, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
-import ProductPage from './components/ProductPage';
 import Cart from './components/Cart';
 import OrderConfirmation from './components/OrderConfirmation';
 import Footer from './components/Footer';
 import Home from './pages/Home';
+import ProductPage from './pages/ProductPage';
 import CheckoutPage from './pages/CheckoutPage';
 import { products } from './data';
 import { Product, CartItem, OrderDetails } from './types';
