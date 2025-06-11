@@ -1,56 +1,19 @@
-import { useState, useMemo, useRef } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Header from './components/Header';
-import Hero from './components/Hero';
-import ProductGrid from './components/ProductGrid';
-import ProductPage from './components/ProductPage';
 import Cart from './components/Cart';
-import Checkout from './components/Checkout';
 import OrderConfirmation from './components/OrderConfirmation';
 import Footer from './components/Footer';
+import Home from './pages/Home';
+import ProductPage from './pages/ProductPage';
+import CheckoutPage from './pages/CheckoutPage';
 import { products } from './data';
 import { Product, CartItem, OrderDetails } from './types';
 
-function HomePage({ 
-  filteredProducts, 
-  onAddToCart, 
-  highlightedProductId, 
-  scrollToProducts 
-}: {
-  filteredProducts: Product[];
-  onAddToCart: (product: Product, variationId?: string) => void;
-  highlightedProductId: number | null;
-  scrollToProducts: () => void;
-}) {
-  const productsRef = useRef<HTMLDivElement>(null);
-
-  const handleScrollToProducts = () => {
-    setTimeout(() => {
-      productsRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-  };
-
-  return (
-    <>
-      <Hero 
-        onShopNowClick={handleScrollToProducts}
-        onViewCatalogClick={handleScrollToProducts}
-      />
-      <div ref={productsRef}>
-        <ProductGrid
-          products={filteredProducts}
-          onAddToCart={onAddToCart}
-          highlightedProductId={highlightedProductId}
-        />
-      </div>
-    </>
-  );
-}
-
-function App() {
+function AppContent() {
+  const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isOrderConfirmationOpen, setIsOrderConfirmationOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
@@ -107,14 +70,14 @@ function App() {
 
   const handleCheckout = () => {
     setIsCartOpen(false);
-    setIsCheckoutOpen(true);
+    navigate('/checkout');
   };
 
   const handleOrderComplete = (details: OrderDetails) => {
     setOrderDetails(details);
-    setIsCheckoutOpen(false);
     setIsOrderConfirmationOpen(true);
     setCartItems([]); // Clear cart after successful order
+    navigate('/'); // Navigate back to home after order completion
   };
 
   const handleContinueShopping = () => {
@@ -149,69 +112,78 @@ function App() {
   };
 
   return (
+    <div className="min-h-screen bg-white">
+      {/* Header - appears on all pages */}
+      <Header
+        cartItemsCount={cartItemsCount}
+        onCartClick={() => setIsCartOpen(true)}
+        activeCategory={activeCategory}
+        onCategoryChange={(category) => {
+          setActiveCategory(category);
+          scrollToProducts();
+        }}
+        products={products}
+        onProductSelect={handleProductSelect}
+      />
+
+      {/* Main Content */}
+      <main>
+        <Routes>
+          <Route 
+            path="/" 
+            element={
+              <Home
+                filteredProducts={filteredProducts}
+                onAddToCart={handleAddToCart}
+                highlightedProductId={highlightedProductId}
+                scrollToProducts={scrollToProducts}
+              />
+            } 
+          />
+          <Route 
+            path="/product/:id" 
+            element={<ProductPage onAddToCart={handleAddToCart} />} 
+          />
+          <Route 
+            path="/checkout" 
+            element={
+              <CheckoutPage 
+                cartItems={cartItems} 
+                onOrderComplete={handleOrderComplete} 
+              />
+            } 
+          />
+          <Route path="*" element={<Navigate to="/" replace />}/>
+        </Routes>
+      </main>
+
+      {/* Footer - appears on all pages */}
+      <Footer />
+
+      {/* Global Modals */}
+      <Cart
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cartItems={cartItems}
+        onUpdateQuantity={handleUpdateQuantity}
+        onRemoveItem={handleRemoveItem}
+        onCheckout={handleCheckout}
+      />
+
+      <OrderConfirmation
+        isOpen={isOrderConfirmationOpen}
+        onClose={() => setIsOrderConfirmationOpen(false)}
+        orderDetails={orderDetails}
+        onContinueShopping={handleContinueShopping}
+      />
+    </div>
+  );
+}
+
+function App() {
+  return (
     <Router>
-      <div className="min-h-screen bg-white">
-        {/* Header - appears on all pages */}
-        <Header
-          cartItemsCount={cartItemsCount}
-          onCartClick={() => setIsCartOpen(true)}
-          activeCategory={activeCategory}
-          onCategoryChange={(category) => {
-            setActiveCategory(category);
-            scrollToProducts();
-          }}
-          products={products}
-          onProductSelect={handleProductSelect}
-        />
-
-        {/* Main Content */}
-        <main>
-          <Routes>
-            <Route 
-              path="/" 
-              element={
-                <HomePage
-                  filteredProducts={filteredProducts}
-                  onAddToCart={handleAddToCart}
-                  highlightedProductId={highlightedProductId}
-                  scrollToProducts={scrollToProducts}
-                />
-              } 
-            />
-            <Route 
-              path="/product/:id" 
-              element={<ProductPage onAddToCart={handleAddToCart} />} 
-            />
-          </Routes>
-        </main>
-
-        {/* Footer - appears on all pages */}
-        <Footer />
-
-        {/* Global Modals */}
-        <Cart
-          isOpen={isCartOpen}
-          onClose={() => setIsCartOpen(false)}
-          cartItems={cartItems}
-          onUpdateQuantity={handleUpdateQuantity}
-          onRemoveItem={handleRemoveItem}
-          onCheckout={handleCheckout}
-        />
-
-        <Checkout
-          isOpen={isCheckoutOpen}
-          onClose={() => setIsCheckoutOpen(false)}
-          cartItems={cartItems}
-          onOrderComplete={handleOrderComplete}
-        />
-
-        <OrderConfirmation
-          isOpen={isOrderConfirmationOpen}
-          onClose={() => setIsOrderConfirmationOpen(false)}
-          orderDetails={orderDetails}
-          onContinueShopping={handleContinueShopping}
-        />
-      </div>
+      <AppContent />
     </Router>
   );
 }
