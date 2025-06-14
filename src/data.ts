@@ -2,6 +2,11 @@ import Peluche from './assets/images/peluche.jpg';
 import Peluche1 from './assets/images/peluche1.jpg';
 import Peluche2 from './assets/images/Peluche2.jpg';
 import Peluche3 from './assets/images/Peluche3.jpg';
+import Peluche4 from './assets/images/Peluche4.jpg';
+import PelucheConCobija from './assets/images/peluche-almuada.jpg'
+import PelucheConCobija1 from './assets/images/peluche-almuada1.jpg'
+import PelucheConCobija2 from './assets/images/peluche-almuada2.jpg'
+import PelucheConCobija21 from './assets/images/peluche-almuada2.1.jpg'
 import { Product } from './types';
 
 export const products: Product[] = [
@@ -10,7 +15,7 @@ export const products: Product[] = [
     name: 'Peluches Adorables',
     price: 10.00,
     description: "Peluches suaves y adorables perfectos para regalar o coleccionar. Disponibles en diferentes colores y tamaños.",
-    image: [Peluche, Peluche1, Peluche2, Peluche3],
+    image: [Peluche, Peluche1, Peluche2, Peluche3, Peluche4],
     category: "peluches",
     inStock: true,
     featured: true,
@@ -19,55 +24,49 @@ export const products: Product[] = [
         id: "0",
         name: "Blanco",
         inStock: true,
-        price: 8.00
       },
       {
         id: "1",
         name: "Azule",
         inStock: true,
-        price: 10.00
       },
       {
         id: "2",
         name: "rosado",
-        inStock: false,
-        price: 15.00
+        inStock: true,
       },
       {
         id: "3",
         name: "Purpulo",
         inStock: true,
-        price: 8.00
+      },
+      {
+        id: "4",
+        name: "Rosado con Trensas",
+        inStock: true,
+        price: 25.00
       }
     ]
   },
   {
     id: 2,
-    name: 'Labial Mate Premium',
-    price: 25.99,
+    name: 'Peluches y Almohada con Cobija',
+    price: 25,
     description: "Labial de larga duración con acabado mate. Fórmula hidratante que no reseca los labios.",
-    image: [
-      "https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg?auto=compress&cs=tinysrgb&w=600",
-      "https://images.pexels.com/photos/3373736/pexels-photo-3373736.jpeg?auto=compress&cs=tinysrgb&w=600"
-    ],
-    category: "labios",
+    image: [PelucheConCobija, PelucheConCobija1, PelucheConCobija2, PelucheConCobija21],
+    category: "peluches",
     inStock: true,
     variations: [
       {
         id: "0",
-        name: "Rojo Clásico",
+        name: "Conejo Rosado",
         inStock: true
       },
       {
         id: "1",
-        name: "Rosa Nude",
+        name: "Hello Kitty",
         inStock: true
       },
-      {
-        id: "2",
-        name: "Berry Intenso",
-        inStock: false
-      }
     ]
   },
   {
