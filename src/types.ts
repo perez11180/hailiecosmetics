@@ -11,7 +11,7 @@ export interface Product {
   description: string;
   price: number; // Base price
   image: string[]; // Array of all images
-  category: 'crema' | 'cartera' | 'lonchera' | 'espejo' | 'peluches' | 'perfume' | 'alcancias' | 'cosmetiquera' | 'mochila';
+  category: 'cosmeticos' | 'crema' | 'cartera' | 'peluches' | 'perfume' ;
   inStock: boolean;
   featured?: boolean;
   variations?: ProductVariation[]; // Optional
