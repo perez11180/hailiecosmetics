@@ -330,12 +330,12 @@ const Header: React.FC<HeaderProps> = ({
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
-                    Maquillaje
+                    Cosmeticos
                   </button>
                   <button
-                    onClick={() => handleCategoryClick('cuidado-piel')}
+                    onClick={() => handleCategoryClick('cosmeticos')}
                     className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
-                      activeCategory === 'cuidado-piel' 
+                      activeCategory === 'Cosmeticos' 
                         ? 'bg-pink-50 text-pink-600 border-l-4 border-pink-500' 
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
@@ -343,24 +343,24 @@ const Header: React.FC<HeaderProps> = ({
                     Cuidado de la Piel
                   </button>
                   <button
-                    onClick={() => handleCategoryClick('labios')}
+                    onClick={() => handleCategoryClick('Crema')}
                     className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
-                      activeCategory === 'labios' 
+                      activeCategory === 'Crema' 
                         ? 'bg-pink-50 text-pink-600 border-l-4 border-pink-500' 
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
-                    Labios
+                    Cartera
                   </button>
                   <button
-                    onClick={() => handleCategoryClick('unas')}
+                    onClick={() => handleCategoryClick('Cartera')}
                     className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
-                      activeCategory === 'unas' 
+                      activeCategory === 'Cartera' 
                         ? 'bg-pink-50 text-pink-600 border-l-4 border-pink-500' 
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
-                    Uñas
+                    Peluches
                   </button>
                 </div>
               </nav>
