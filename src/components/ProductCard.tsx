@@ -66,11 +66,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isHighl
             </span>
           </div>
         )}
-        {product.featured && (
+        {/* {product.featured && (
           <div className="absolute top-4 left-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-3 py-1 rounded-full text-xs font-medium">
             Destacado
           </div>
-        )}
+        )} */}
       </div>
       
       <div className="p-6">

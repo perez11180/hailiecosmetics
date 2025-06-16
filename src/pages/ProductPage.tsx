@@ -127,12 +127,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
                   </span>
                 </div>
               )}
-
-              {product.featured && (
-                <div className="absolute top-4 left-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white px-4 py-2 rounded-full text-sm font-medium">
-                  Destacado
-                </div>
-              )}
             </div>
 
             {/* Image Thumbnails */}
@@ -172,7 +166,6 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
                     />
                   ))}
                 </div>
-                <span className="text-sm text-gray-500">(4.8) • 127 reseñas</span>
               </div>
             </div>
 
@@ -193,7 +186,10 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
                   {product.variations.map((variation) => (
                     <button
                       key={variation.id}
-                      onClick={() => setSelectedVariation(variation)}
+                      onClick={() => {
+                        setCurrentImageIndex(Number(variation.id))
+                        setSelectedVariation(variation)
+                      }}
                       disabled={!variation.inStock}
                       className={`p-3 rounded-lg border-2 text-left transition-all ${
                         selectedVariation?.id === variation.id
