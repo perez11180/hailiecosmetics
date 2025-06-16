@@ -147,36 +147,44 @@ const Header: React.FC<HeaderProps> = ({
                 Todo
               </button>
               <button
-                onClick={() => handleCategoryClick('maquillaje')}
+                onClick={() => handleCategoryClick('cosmeticos')}
                 className={`text-gray-700 hover:text-pink-500 px-3 py-2 text-sm font-medium transition-colors ${
-                  activeCategory === 'maquillaje' ? 'text-pink-500 border-b-2 border-pink-500' : ''
+                  activeCategory === 'cosmeticos' ? 'text-pink-500 border-b-2 border-pink-500' : ''
                 }`}
               >
-                Maquillaje
+                Cosmeticos
               </button>
               <button
-                onClick={() => handleCategoryClick('cuidado-piel')}
+                onClick={() => handleCategoryClick('crema')}
                 className={`text-gray-700 hover:text-pink-500 px-3 py-2 text-sm font-medium transition-colors ${
-                  activeCategory === 'cuidado-piel' ? 'text-pink-500 border-b-2 border-pink-500' : ''
+                  activeCategory === 'crema' ? 'text-pink-500 border-b-2 border-pink-500' : ''
                 }`}
               >
-                Cuidado de la Piel
+                Crema Para la Piel
               </button>
               <button
-                onClick={() => handleCategoryClick('labios')}
+                onClick={() => handleCategoryClick('peluches')}
                 className={`text-gray-700 hover:text-pink-500 px-3 py-2 text-sm font-medium transition-colors ${
-                  activeCategory === 'labios' ? 'text-pink-500 border-b-2 border-pink-500' : ''
+                  activeCategory === 'peluches' ? 'text-pink-500 border-b-2 border-pink-500' : ''
                 }`}
               >
-                Labios
+                Peluches
               </button>
               <button
-                onClick={() => handleCategoryClick('unas')}
+                onClick={() => handleCategoryClick('cartera')}
                 className={`text-gray-700 hover:text-pink-500 px-3 py-2 text-sm font-medium transition-colors ${
-                  activeCategory === 'unas' ? 'text-pink-500 border-b-2 border-pink-500' : ''
+                  activeCategory === 'cartera' ? 'text-pink-500 border-b-2 border-pink-500' : ''
                 }`}
               >
-                Uñas
+                Carteras
+              </button>
+              <button
+                onClick={() => handleCategoryClick('perfume')}
+                className={`text-gray-700 hover:text-pink-500 px-3 py-2 text-sm font-medium transition-colors ${
+                  activeCategory === 'perfume' ? 'text-pink-500 border-b-2 border-pink-500' : ''
+                }`}
+              >
+                Perfumes
               </button>
             </nav>
 
@@ -323,44 +331,54 @@ const Header: React.FC<HeaderProps> = ({
                     Todo
                   </button>
                   <button
-                    onClick={() => handleCategoryClick('maquillaje')}
+                    onClick={() => handleCategoryClick('cosmeticos')}
                     className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
-                      activeCategory === 'maquillaje' 
+                      activeCategory === 'cosmeticos' 
                         ? 'bg-pink-50 text-pink-600 border-l-4 border-pink-500' 
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
-                    Maquillaje
+                    Cosmeticos
                   </button>
                   <button
-                    onClick={() => handleCategoryClick('cuidado-piel')}
+                    onClick={() => handleCategoryClick('crema')}
                     className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
-                      activeCategory === 'cuidado-piel' 
+                      activeCategory === 'crema' 
                         ? 'bg-pink-50 text-pink-600 border-l-4 border-pink-500' 
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
-                    Cuidado de la Piel
+                    Crema Para la Piel
                   </button>
                   <button
-                    onClick={() => handleCategoryClick('labios')}
+                    onClick={() => handleCategoryClick('cartera')}
                     className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
-                      activeCategory === 'labios' 
+                      activeCategory === 'cartera' 
                         ? 'bg-pink-50 text-pink-600 border-l-4 border-pink-500' 
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
-                    Labios
+                    Carteras
                   </button>
                   <button
-                    onClick={() => handleCategoryClick('unas')}
+                    onClick={() => handleCategoryClick('peluches')}
                     className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
-                      activeCategory === 'unas' 
+                      activeCategory === 'peluches' 
                         ? 'bg-pink-50 text-pink-600 border-l-4 border-pink-500' 
                         : 'text-gray-700 hover:bg-gray-50'
                     }`}
                   >
-                    Uñas
+                    Peluches
+                  </button>
+                  <button
+                    onClick={() => handleCategoryClick('perfume')}
+                    className={`w-full text-left px-4 py-3 rounded-lg font-medium transition-colors ${
+                      activeCategory === 'perfume' 
+                        ? 'bg-pink-50 text-pink-600 border-l-4 border-pink-500' 
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    Perfumes
                   </button>
                 </div>
               </nav>

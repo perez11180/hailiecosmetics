@@ -71,7 +71,6 @@ export const products: Product[] = [
     image: [Peluche, Peluche1, Peluche2, Peluche3, Peluche4],
     category: "peluches",
     inStock: true,
-    featured: true,
     variations: [
       {
         id: "0",
@@ -317,9 +316,14 @@ export const products: Product[] = [
       variations: [
         {
           id: "0",
-          name: "Cosmetiqueras de Stitch",
+          name: "Cartera Rosada",
           inStock: true
-        }
+        },
+        {
+          id: "1",
+          name: "Cartera Negra",
+          inStock: true
+        },
       ]
     },
     {
@@ -593,22 +597,6 @@ export const products: Product[] = [
         {
           id: "0",
           name: "Disney Princess",
-          inStock: true
-        }
-      ]
-    },
-    {
-      id: 26,
-      name: 'Labiales Matte 12 tonos',
-      price: 12,
-      description: "Labiales Matte 12 tonos",
-      image: [LabialesMatte, LabialesMatte1],
-      category: "cosmeticos",
-      inStock: true,
-      variations: [
-        {
-          id: "0",
-          name: "Pretty Makeup Box",
           inStock: true
         }
       ]

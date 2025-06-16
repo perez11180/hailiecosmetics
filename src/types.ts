@@ -13,7 +13,6 @@ export interface Product {
   image: string[]; // Array of all images
   category: 'cosmeticos' | 'crema' | 'cartera' | 'peluches' | 'perfume' ;
   inStock: boolean;
-  featured?: boolean;
   variations?: ProductVariation[]; // Optional
 }
 
