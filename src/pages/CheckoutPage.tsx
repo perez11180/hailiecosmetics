@@ -331,7 +331,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
               {cartItems.map((item) => (
                 <div key={`${item.product.id}-${item.variationId || 'default'}`} className="flex items-center space-x-4">
                   <img
-                    src={item.product.image[Number(item.variationId) || 0]}
+                    src={item.product.image[Number(item.variationId)] || item.product.image[0]}
                     alt={item.product.name}
                     className="w-16 h-16 object-cover rounded-xl"
                   />

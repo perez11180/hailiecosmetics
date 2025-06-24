@@ -12,12 +12,9 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isHighlighted }) => {
   const navigate = useNavigate();
 
-  const handleImageClick = () => {
+  const handleItemClick = () => {
     navigate(`/product/${product.id}`);
-  };
-
-  const handleNameClick = () => {
-    navigate(`/product/${product.id}`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleButtonClick = () => {
@@ -51,7 +48,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isHighl
         <img
           src={product.image[0]}
           alt={product.name}
-          onClick={handleImageClick}
+          onClick={handleItemClick}
           className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300 cursor-pointer"
         />
         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -70,7 +67,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, isHighl
       
       <div className="p-6">
         <h3 
-          onClick={handleNameClick}
+          onClick={handleItemClick}
           className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-pink-600 transition-colors cursor-pointer"
         >
           {product.name}

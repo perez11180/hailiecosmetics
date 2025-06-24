@@ -98,7 +98,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ onAddToCart }) => {
           <div className="space-y-4">
             <div className="relative aspect-square bg-gray-100 rounded-2xl overflow-hidden">
               <img
-                src={product.image[currentImageIndex]}
+                src={product.image[currentImageIndex] || product.image[0]}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />

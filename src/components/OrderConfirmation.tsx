@@ -48,7 +48,7 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
                   <div key={item.product.id} className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <img
-                        src={item.product.image[Number(item.variationId)]}
+                        src={item.product.image[Number(item.variationId)] || item.product.image[0]}
                         alt={item.product.name}
                         className="w-12 h-12 object-cover rounded-lg"
                       />
