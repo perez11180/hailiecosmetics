@@ -3,7 +3,6 @@ import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 import { ArrowLeft, CreditCard, Truck, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { CartItem, ShippingInfo, OrderDetails } from '../types';
-import emailjs from '@emailjs/browser';
 import { US_STATES } from '../data';
 
 interface CheckoutPageProps {
@@ -28,13 +27,15 @@ const sendOrderEmail = async (order: OrderDetails) => {
     total: order.total.toFixed(2)
   };
 
+
+  
   try {
-    const res = await emailjs.send(
-      'YOUR_SERVICE_ID',
-      'YOUR_TEMPLATE_ID',
-      params,
-      'YOUR_PUBLIC_KEY'
-    );
+    const res = await fetch("https://hailiecosmetics.com/.netlify/functions/sendOrderEmail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    });
+    
     console.log('Email sent:', res.status);
   } catch (err) {
     console.error('Email sending failed:', err);
@@ -331,7 +332,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
               {cartItems.map((item) => (
                 <div key={`${item.product.id}-${item.variationId || 'default'}`} className="flex items-center space-x-4">
                   <img
-                    src={item.product.image[Number(item.variationId) || 0]}
+                    src={item.product.image[Number(item.variationId)] || item.product.image[0]}
                     alt={item.product.name}
                     className="w-16 h-16 object-cover rounded-xl"
                   />

@@ -1,27 +1,30 @@
 import React from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { CheckCircle, Package, Mail, ArrowRight } from 'lucide-react';
 import { OrderDetails } from '../types';
 
-interface OrderConfirmationProps {
-  isOpen: boolean;
-  onClose: () => void;
+interface OrderConfirmationPageProps {
   orderDetails: OrderDetails | null;
-  onContinueShopping: () => void;
 }
 
-const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
-  isOpen,
-  onClose,
-  orderDetails,
-  onContinueShopping
+const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
+  orderDetails
 }) => {
-  if (!isOpen || !orderDetails) return null;
+  const navigate = useNavigate();
+
+  // Redirect to home if no order details (direct access)
+  if (!orderDetails) {
+    return <Navigate to="/" replace />;
+  }
+
+  const handleContinueShopping = () => {
+    navigate('/');
+  };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
-      <div className="absolute inset-0 bg-black bg-opacity-50\" onClick={onClose}></div>
-      <div className="absolute inset-0 flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
           <div className="p-8 text-center">
             {/* Success Icon */}
             <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
@@ -48,7 +51,7 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
                   <div key={item.product.id} className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <img
-                        src={item.product.image[Number(item.variationId)]}
+                        src={item.product.image[Number(item.variationId)] || item.product.image[0]}
                         alt={item.product.name}
                         className="w-12 h-12 object-cover rounded-lg"
                       />
@@ -97,17 +100,11 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
             {/* Actions */}
             <div className="flex flex-col sm:flex-row gap-4">
               <button
-                onClick={onContinueShopping}
+                onClick={handleContinueShopping}
                 className="flex-1 bg-gradient-to-r from-pink-500 to-rose-500 text-white py-3 px-6 rounded-lg font-semibold hover:from-pink-600 hover:to-rose-600 transition-all flex items-center justify-center space-x-2"
               >
                 <span>Seguir Comprando</span>
                 <ArrowRight className="h-4 w-4" />
-              </button>
-              <button
-                onClick={onClose}
-                className="flex-1 border-2 border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
-              >
-                Cerrar
               </button>
             </div>
 
@@ -127,4 +124,4 @@ const OrderConfirmation: React.FC<OrderConfirmationProps> = ({
   );
 };
 
-export default OrderConfirmation;
+export default OrderConfirmationPage;

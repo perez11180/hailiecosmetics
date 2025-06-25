@@ -136,7 +136,7 @@ export const products: Product[] = [
     name: 'Carteras De Niña',
     price: 35.50,
     description: "Cartera De Niña",
-    image: [CarteraDeNina, CarteraDeNina],
+    image: [CarteraDeNina],
     category: "cartera",
     inStock: true,
     variations: [   
@@ -210,7 +210,7 @@ export const products: Product[] = [
     name: 'Exfoliante para cara y cuerpo',
     price: 8,
     description: "Exfoliante para cara y cuerpo",
-    image: [Exfoliante, Exfoliante],
+    image: [Exfoliante],
     category: "crema",
     inStock: true,
     variations: [
@@ -231,7 +231,7 @@ export const products: Product[] = [
       name: 'Set de pefume',
       price: 10,
       description: "Set de perfume con su crema",
-      image: [SetDePerfume,SetDePerfume,SetDePerfume],
+      image: [SetDePerfume],
       category: "perfume",
       inStock: true,
       variations: [
@@ -385,7 +385,7 @@ export const products: Product[] = [
       name: 'Peine grande',
       price: 5,
       description: "Peine grande $5 la pieza",
-      image: [PeineGrande, PeineGrande, PeineGrande],
+      image: [PeineGrande],
       category: "cosmeticos",
       inStock: true,
       variations: [

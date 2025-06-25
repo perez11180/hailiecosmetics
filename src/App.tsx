@@ -2,11 +2,11 @@ import { useState, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Cart from './components/Cart';
-import OrderConfirmation from './components/OrderConfirmation';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import ProductPage from './pages/ProductPage';
 import CheckoutPage from './pages/CheckoutPage';
+import OrderConfirmationPage from './pages/OrderConfirmationPage';
 import { products } from './data';
 import { Product, CartItem, OrderDetails } from './types';
 
@@ -14,7 +14,6 @@ function AppContent() {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isOrderConfirmationOpen, setIsOrderConfirmationOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [highlightedProductId, setHighlightedProductId] = useState<number | null>(null);
@@ -75,14 +74,8 @@ function AppContent() {
 
   const handleOrderComplete = (details: OrderDetails) => {
     setOrderDetails(details);
-    setIsOrderConfirmationOpen(true);
     setCartItems([]); // Clear cart after successful order
-    navigate('/'); // Navigate back to home after order completion
-  };
-
-  const handleContinueShopping = () => {
-    setIsOrderConfirmationOpen(false);
-    setOrderDetails(null);
+    navigate('/order-confirmation');
   };
 
   const handleProductSelect = (product: Product) => {
@@ -153,6 +146,10 @@ function AppContent() {
               />
             } 
           />
+          <Route 
+            path="/order-confirmation"
+            element={<OrderConfirmationPage orderDetails={orderDetails} />}
+          />
           <Route path="*" element={<Navigate to="/" replace />}/>
         </Routes>
       </main>
@@ -168,13 +165,6 @@ function AppContent() {
         onUpdateQuantity={handleUpdateQuantity}
         onRemoveItem={handleRemoveItem}
         onCheckout={handleCheckout}
-      />
-
-      <OrderConfirmation
-        isOpen={isOrderConfirmationOpen}
-        onClose={() => setIsOrderConfirmationOpen(false)}
-        orderDetails={orderDetails}
-        onContinueShopping={handleContinueShopping}
       />
     </div>
   );
