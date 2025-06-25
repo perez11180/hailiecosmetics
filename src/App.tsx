@@ -78,11 +78,6 @@ function AppContent() {
     navigate('/order-confirmation');
   };
 
-  const handleContinueShopping = () => {
-    setOrderDetails(null);
-    navigate('/');
-  };
-
   const handleProductSelect = (product: Product) => {
     // First change to the correct category
     setActiveCategory(product.category);

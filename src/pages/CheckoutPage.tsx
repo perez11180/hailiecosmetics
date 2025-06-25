@@ -28,7 +28,16 @@ const sendOrderEmail = async (order: OrderDetails) => {
     total: order.total.toFixed(2)
   };
 
+
+  
   try {
+    await fetch("https://hailiecosmetics.com/.netlify/functions/sendOrderEmail", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    });
+    
+
     const res = await emailjs.send(
       'YOUR_SERVICE_ID',
       'YOUR_TEMPLATE_ID',
