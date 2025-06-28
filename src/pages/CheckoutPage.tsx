@@ -30,7 +30,7 @@ const sendOrderEmail = async (order: OrderDetails) => {
 
   
   try {
-    const res = await fetch("/api/sendOrderEmails", {
+    const res = await fetch("/.netlify/functions/sendOrderEmails", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),
