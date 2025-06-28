@@ -1,6 +1,6 @@
-const fetch = require("node-fetch");
+import fetch from "node-fetch";
 
-exports.handler = async function (event, context) {
+export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
@@ -26,11 +26,11 @@ exports.handler = async function (event, context) {
     personalizations: [
       {
         to: [{ email: user_email }],
-        subject: "Gracias por tu pedido - Hailie Cosmetics",
+        subject: "Gracias por tu compra en Hailie Cosmetics!",
       },
       {
-        to: [{ email: "orders@hailiecosmetics.com" }],
-        subject: "Nuevo Pedido Recibido",
+        to: [{ email: "joseneadsit@gmail.com" }],
+        subject: "Nueva compra registrada en Hailie Cosmetics",
       },
     ],
     from: { email: "orders@hailiecosmetics.com" },
