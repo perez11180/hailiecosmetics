@@ -30,7 +30,7 @@ const sendOrderEmail = async (order: OrderDetails) => {
 
   
   try {
-    const res = await fetch("https://hailiecosmetics.com/.netlify/functions/sendOrderEmail", {
+    const res = await fetch("/api/sendOrderEmails", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(params),
